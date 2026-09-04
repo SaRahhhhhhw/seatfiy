@@ -1,18 +1,19 @@
 import { Bell, Star } from 'lucide-react';
 import Button from './Button';
+import { formatDuration } from '../../utils/format';
 
 export function ComingSoonCard({ movie }) {
-  const { title, poster, genres, releaseDate } = movie;
+  const { title, poster, genre, releaseDate } = movie;
 
   return (
     <div className="coming-soon-card">
       <div className="coming-soon-poster">
-        <img src={poster} alt={title} />
+        {poster ? <img src={poster} alt={title} /> : <div className="card-poster-placeholder">{title}</div>}
       </div>
       <div className="coming-soon-info">
         <h3>{title}</h3>
-        <p className="meta">{genres.join(' · ')}</p>
-        <p className="release-date">{releaseDate}</p>
+        <p className="meta">{[genre, formatDuration(movie.duration)].filter(Boolean).join(' · ')}</p>
+        {releaseDate && <p className="release-date">{releaseDate}</p>}
         <button className="notify-btn">
           <Bell size={14} />
           Notify Me

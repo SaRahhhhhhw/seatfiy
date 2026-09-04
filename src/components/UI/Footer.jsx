@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 import { ArrowRight } from 'lucide-react';
-import { FaApple, FaGooglePlay, FaXTwitter, FaInstagram, FaFacebookF, FaYoutube } from 'react-icons/fa6';
+import { FaApple, FaGooglePlay } from 'react-icons/fa6';
 
 function Footer() {
   return (
@@ -28,12 +28,6 @@ function Footer() {
             Your premium destination for cinema booking. Discover films, choose your
             seats, and experience the magic of cinema.
           </p>
-          <div className="social-icons">
-            <a href="#" aria-label="Twitter"><FaXTwitter size={14} /></a>
-            <a href="#" aria-label="Instagram"><FaInstagram size={14} /></a>
-            <a href="#" aria-label="Facebook"><FaFacebookF size={14} /></a>
-            <a href="#" aria-label="Youtube"><FaYoutube size={14} /></a>
-          </div>
         </div>
 
         <div className="footer-col">

@@ -5,42 +5,68 @@ import { NowShowingBadge, RatingBadge } from '../UI/Badge';
 import GenreLabel from '../UI/GenreLabel';
 import Button from '../UI/Button';
 import MovieCard from '../UI/MovieCard';
+import Loading from '../UI/Loading';
 import { ComingSoonCard, CinemaCard } from '../UI/Card';
-import { nowShowing, comingSoon, cinemas } from '../../data/movies';
+import { formatDuration } from '../../utils/format';
+import { getMovies } from '../../services/Movies';
+import { cinemas } from '../../data/movies';
 
 const SLIDE_INTERVAL = 6000;
 
 function Home() {
+  const [nowShowing, setNowShowing] = useState([]);
+  const [comingSoon, setComingSoon] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
   const [activeSlide, setActiveSlide] = useState(0);
-  const featured = nowShowing.slice(0, 5);
-  const movie = featured[activeSlide];
 
   useEffect(() => {
+    Promise.all([
+      getMovies({ status: 'now_showing' }),
+      getMovies({ status: 'coming_soon' }),
+    ])
+      .then(([shown, soon]) => {
+        setNowShowing(shown);
+        setComingSoon(soon);
+      })
+      .catch(() => setError('Could not load data. Is the API running?'))
+      .finally(() => setLoading(false));
+  }, []);
+
+  const featured = nowShowing.slice(0, 5);
+
+  useEffect(() => {
+    if (!featured.length) return;
     const timer = setInterval(() => {
       setActiveSlide((prev) => (prev + 1) % featured.length);
     }, SLIDE_INTERVAL);
     return () => clearInterval(timer);
   }, [featured.length]);
 
+  if (loading) return <Loading />;
+  if (error) return <p className="page-container form-error">{error}</p>;
+  if (!featured.length) return <p className="page-container hero-desc">No movies to show yet.</p>;
+
+  const movie = featured[activeSlide];
+  const bgImage = movie.backdrop || movie.poster;
+
   return (
     <>
       <section
         className="hero-section"
-        style={{ backgroundImage: `url(${movie.backdrop})` }}
+        style={bgImage ? { backgroundImage: `url(${bgImage})` } : undefined}
       >
         <div className="hero-content fade-in" key={movie.id}>
           <div className="hero-badges">
             <NowShowingBadge />
-            <RatingBadge rating={movie.rating} />
-            <span className="runtime-badge">{movie.duration}</span>
+            {movie.rating > 0 && <RatingBadge rating={movie.rating} />}
+            {movie.duration > 0 && <span className="runtime-badge">{formatDuration(movie.duration)}</span>}
           </div>
 
           <h1>{movie.title}</h1>
 
           <div className="genre-tags">
-            {movie.genres.map((genre) => (
-              <GenreLabel key={genre}>{genre}</GenreLabel>
-            ))}
+            {movie.genre && <GenreLabel>{movie.genre}</GenreLabel>}
           </div>
 
           <p className="hero-desc">{movie.description}</p>
@@ -73,39 +99,37 @@ function Home() {
           </Link>
         </div>
         <div className="movies-grid">
-          {nowShowing.map((movie) => (
+          {nowShowing.slice(0, 5).map((movie) => (
             <MovieCard key={movie.id} movie={movie} />
           ))}
         </div>
       </section>
 
-      <section className="coming-soon-section">
-        <div className="section-header">
-          <h2>Coming Soon</h2>
-          <Link to="/coming-soon" className="see-all">
-            See all <ArrowRight size={16} />
-          </Link>
-        </div>
-        <div className="coming-soon-grid">
-          {comingSoon.map((movie) => (
-            <ComingSoonCard key={movie.id} movie={movie} />
-          ))}
-        </div>
-      </section>
+      {comingSoon.length > 0 && (
+        <section className="coming-soon-section">
+          <div className="section-header">
+            <h2>Coming Soon</h2>
+          </div>
+          <div className="coming-soon-grid">
+            {comingSoon.slice(0, 4).map((movie) => (
+              <ComingSoonCard key={movie.id} movie={movie} />
+            ))}
+          </div>
+        </section>
+      )}
 
-      <section className="cinemas-section">
-        <div className="section-header">
-          <h2>Popular Cinemas</h2>
-          <Link to="/cinemas" className="see-all">
-            See all <ArrowRight size={16} />
-          </Link>
-        </div>
-        <div className="cinemas-grid">
-          {cinemas.map((cinema) => (
-            <CinemaCard key={cinema.id} cinema={cinema} />
-          ))}
-        </div>
-      </section>
+      {cinemas && cinemas.length > 0 && (
+        <section className="cinemas-section">
+          <div className="section-header">
+            <h2>Popular Cinemas</h2>
+          </div>
+          <div className="cinemas-grid">
+            {cinemas.map((cinema) => (
+              <CinemaCard key={cinema.id} cinema={cinema} />
+            ))}
+          </div>
+        </section>
+      )}
     </>
   );
 }

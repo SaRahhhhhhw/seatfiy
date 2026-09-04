@@ -1058,7 +1058,139 @@ button {
   color: #fff;
 }
 
-/* ===================== RESPONSIVE ===================== */
+/* ===================== FEEDBACK / ADMIN ===================== */
+.form-error {
+  color: #f87171;
+  background-color: rgba(248, 113, 113, 0.1);
+  border: 1px solid rgba(248, 113, 113, 0.3);
+  padding: 0.7rem 1rem;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  margin-bottom: 1.2rem;
+}
+
+.card-poster-placeholder {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 1rem;
+  background: linear-gradient(160deg, #1f1f1f, #0b0b0b);
+  color: #737373;
+  font-weight: 600;
+}
+
+.admin-form {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: 1rem;
+  background-color: #131313;
+  border: 1px solid #232323;
+  border-radius: 12px;
+  padding: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.admin-form .input-group {
+  margin-bottom: 0;
+  min-width: 180px;
+  flex: 1;
+}
+
+.admin-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+}
+
+.admin-list-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #131313;
+  border: 1px solid #232323;
+  border-radius: 8px;
+  padding: 0.9rem 1.2rem;
+  font-size: 0.9rem;
+  color: #d4d4d4;
+}
+
+.input-field select,
+.input-field input[type="date"] {
+  flex: 1;
+  background: transparent;
+  border: none;
+  color: #ffffff;
+  font-size: 0.95rem;
+  font-family: 'Poppins', sans-serif;
+}
+
+.input-field select:focus,
+.input-field input[type="date"]:focus {
+  outline: none;
+}
+
+.input-field select option {
+  background-color: #131313;
+  color: #ffffff;
+}
+
+.booking-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.booking-filters .input-group {
+  min-width: 180px;
+  margin-bottom: 0;
+}
+
+.admin-tabs {
+  display: flex;
+  gap: 1.5rem;
+  border-bottom: 1px solid #232323;
+  margin-bottom: 2rem;
+}
+
+.admin-tabs a {
+  color: #a3a3a3;
+  padding-bottom: 0.8rem;
+  font-weight: 600;
+  border-bottom: 2px solid transparent;
+}
+
+.admin-tabs a.active,
+.admin-tabs a:hover {
+  color: #ffffff;
+  border-bottom-color: #e50914;
+}
+
+.cart-icon {
+  position: relative;
+}
+
+.cart-badge {
+  position: absolute;
+  top: -4px;
+  right: -6px;
+  background-color: #e50914;
+  color: #fff;
+  font-size: 0.65rem;
+  font-weight: 700;
+  min-width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 3px;
+}
+
 @media (max-width: 900px) {
   .navbar, .hero-section, .now-showing-section, .coming-soon-section, .cinemas-section, .footer-bottom, .footer-cta, .page-container {
     padding-left: 1.5rem;
@@ -1067,6 +1199,20 @@ button {
 
   .nav-links {
     display: none;
+  }
+
+  .nav-links.open {
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background-color: rgba(11, 11, 11, 0.98);
+    backdrop-filter: blur(10px);
+    padding: 1.2rem 1.5rem;
+    gap: 1rem;
+    border-bottom: 1px solid #1a1a1a;
   }
 
   .nav-toggle {
